@@ -10,18 +10,24 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// In-memory data store
+// In-memory data store with more detailed initial tasks
 let tasks = [
   {
     id: uuidv4(),
     title: 'Complete assignment',
+    description: 'Finish the technical task for the interview',
     completed: false,
+    priority: 'high',
+    category: 'work',
     createdAt: new Date().toISOString(),
   },
   {
     id: uuidv4(),
     title: 'Review code',
+    description: 'Check the latest PR on GitHub',
     completed: true,
+    priority: 'medium',
+    category: 'development',
     createdAt: new Date().toISOString(),
   }
 ];
@@ -38,28 +44,31 @@ app.get('/tasks', (req, res) => {
 
 // POST /tasks - Create a new task
 app.post('/tasks', (req, res) => {
-  const { title } = req.body;
+  const { title, description, priority, category } = req.body;
 
   // Basic Validation
   if (!title || typeof title !== 'string' || title.trim() === '') {
-    return sendError(res, 400, 'Title is required and must be a non-empty string.');
+    return sendError(res, 400, 'Title is required.');
   }
 
   const newTask = {
     id: uuidv4(),
     title: title.trim(),
+    description: description ? description.trim() : '',
     completed: false,
+    priority: priority || 'medium',
+    category: category || 'general',
     createdAt: new Date().toISOString(),
   };
 
-  tasks.unshift(newTask); // Add to beginning
+  tasks.unshift(newTask);
   res.status(201).json({ success: true, data: newTask });
 });
 
-// PATCH /tasks/:id - Update a task status
+// PATCH /tasks/:id - Update a task
 app.patch('/tasks/:id', (req, res) => {
   const { id } = req.params;
-  const { completed } = req.body;
+  const { completed, title, description, priority, category } = req.body;
 
   const taskIndex = tasks.findIndex(t => t.id === id);
 
@@ -67,14 +76,12 @@ app.patch('/tasks/:id', (req, res) => {
     return sendError(res, 404, 'Task not found.');
   }
 
-  // Update logic - can also update title if needed (bonus)
-  if (typeof completed === 'boolean') {
-    tasks[taskIndex].completed = completed;
-  }
-  
-  if (req.body.title && typeof req.body.title === 'string' && req.body.title.trim() !== '') {
-    tasks[taskIndex].title = req.body.title.trim();
-  }
+  // Update logic
+  if (typeof completed === 'boolean') tasks[taskIndex].completed = completed;
+  if (title) tasks[taskIndex].title = title.trim();
+  if (description !== undefined) tasks[taskIndex].description = description.trim();
+  if (priority) tasks[taskIndex].priority = priority;
+  if (category) tasks[taskIndex].category = category;
 
   res.json({ success: true, data: tasks[taskIndex] });
 });
