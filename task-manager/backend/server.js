@@ -56,6 +56,11 @@ app.post('/tasks', (req, res) => {
     return sendError(res, 400, 'Title is required.');
   }
 
+  const validPriorities = ['low', 'medium', 'high'];
+  if (priority && !validPriorities.includes(priority)) {
+    return sendError(res, 400, 'Priority must be one of: low, medium, high.');
+  }
+
   const newTask = {
     id: uuidv4(),
     title: title.trim(),
