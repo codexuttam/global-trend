@@ -91,7 +91,7 @@ app.post('/tasks', (req, res) => {
 // PATCH /tasks/:id - Update a task
 app.patch('/tasks/:id', (req, res) => {
   const { id } = req.params;
-  const { completed, title, description, priority, category } = req.body;
+  const { completed, title, description, priority, category, dueDate } = req.body;
 
   const taskIndex = tasks.findIndex(t => t.id === id);
 
@@ -105,6 +105,7 @@ app.patch('/tasks/:id', (req, res) => {
   if (description !== undefined) tasks[taskIndex].description = description.trim();
   if (priority) tasks[taskIndex].priority = priority;
   if (category) tasks[taskIndex].category = category;
+  if (dueDate !== undefined) tasks[taskIndex].dueDate = dueDate;
 
   res.json({ success: true, data: tasks[taskIndex] });
 });
