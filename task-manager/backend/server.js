@@ -19,6 +19,7 @@ let tasks = [
     completed: false,
     priority: 'high',
     category: 'work',
+    dueDate: new Date(Date.now() + 86400000).toISOString(),
     createdAt: new Date().toISOString(),
   },
   {
@@ -28,6 +29,7 @@ let tasks = [
     completed: true,
     priority: 'medium',
     category: 'development',
+    dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
     createdAt: new Date().toISOString(),
   }
 ];
