@@ -99,6 +99,10 @@ app.patch('/tasks/:id', (req, res) => {
     return sendError(res, 404, 'Task not found.');
   }
 
+  if (completed !== undefined && typeof completed !== 'boolean') {
+    return sendError(res, 400, 'Completed status must be a boolean.');
+  }
+
   // Update logic
   if (typeof completed === 'boolean') tasks[taskIndex].completed = completed;
   if (title) tasks[taskIndex].title = title.trim();
