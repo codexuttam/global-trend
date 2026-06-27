@@ -37,6 +37,11 @@ const sendError = (res, status, message) => {
   return res.status(status).json({ success: false, error: message });
 };
 
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // GET /tasks - Return all tasks
 app.get('/tasks', (req, res) => {
   res.json({ success: true, data: tasks });
