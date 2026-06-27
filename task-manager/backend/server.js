@@ -61,7 +61,7 @@ app.get('/tasks/:id', (req, res) => {
 
 // POST /tasks - Create a new task
 app.post('/tasks', (req, res) => {
-  const { title, description, priority, category } = req.body;
+  const { title, description, priority, category, dueDate } = req.body;
 
   // Basic Validation
   if (!title || typeof title !== 'string' || title.trim() === '') {
@@ -80,6 +80,7 @@ app.post('/tasks', (req, res) => {
     completed: false,
     priority: priority || 'medium',
     category: category || 'general',
+    dueDate: dueDate || null,
     createdAt: new Date().toISOString(),
   };
 
