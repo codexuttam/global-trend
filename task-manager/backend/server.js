@@ -109,6 +109,12 @@ app.delete('/tasks/:id', (req, res) => {
   res.json({ success: true, data: deletedTask });
 });
 
+// DELETE /tasks - Delete all tasks
+app.delete('/tasks', (req, res) => {
+  tasks.length = 0; // Clear the array
+  res.json({ success: true, message: 'All tasks deleted' });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
