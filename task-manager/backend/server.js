@@ -47,6 +47,16 @@ app.get('/tasks', (req, res) => {
   res.json({ success: true, data: tasks });
 });
 
+// GET /tasks/:id - Return a single task
+app.get('/tasks/:id', (req, res) => {
+  const { id } = req.params;
+  const task = tasks.find(t => t.id === id);
+  if (!task) {
+    return sendError(res, 404, 'Task not found.');
+  }
+  res.json({ success: true, data: task });
+});
+
 // POST /tasks - Create a new task
 app.post('/tasks', (req, res) => {
   const { title, description, priority, category } = req.body;
